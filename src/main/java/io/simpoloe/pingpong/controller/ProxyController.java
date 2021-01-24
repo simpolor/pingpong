@@ -11,18 +11,15 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class SenderController {
+public class ProxyController {
 
     private final RestTemplate restTemplate;
 
     @Value("${callback.url}")
     private String callbackUrl;
 
-    @Value("${proxy.url}")
-    private String proxyUrl;
-
-    @GetMapping("/call")
-    public ResponseEntity<String> call(){
+    @GetMapping("/proxy")
+    public ResponseEntity<String> proxy(){
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -37,25 +34,6 @@ public class SenderController {
         stringBuilder.append("The response to your request is ");
         stringBuilder.append(message);
 
-
-        return new ResponseEntity(stringBuilder.toString(), HttpStatus.OK);
-    }
-
-    @GetMapping("/call/proxy")
-    public ResponseEntity<String> callProxy(){
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        httpHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
-        HttpEntity<?> httpEntity = new HttpEntity<>(httpHeaders);
-        String message = restTemplate.exchange(proxyUrl, HttpMethod.GET, httpEntity, String.class).getBody();
-        log.info("> Proxy url : {}, Response message : {}", callbackUrl, message);
-
-        stringBuilder.append("The response to your request is ");
-        stringBuilder.append(message);
 
         return new ResponseEntity(stringBuilder.toString(), HttpStatus.OK);
     }
