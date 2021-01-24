@@ -39,6 +39,7 @@ public class ReceiverController {
         }
         if (ip == null) {
             ip = request.getRemoteAddr();
+            log.info("Header RemoteAddr : {}", ip);
         }
         stringBuilder.append(ip);
 
